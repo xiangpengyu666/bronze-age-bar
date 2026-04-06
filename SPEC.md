@@ -122,7 +122,11 @@ The game selects a story based on three inputs:
   "occasion": "state_dinner",
   "outcome_tier": "perfect",
   "bei_triggered": false,
-  "text": "Story text here."
+  "text": "Story text here.",
+  "media": {
+    "type": "video",
+    "src": "videos/state_dinner_perfect_01.webm"
+  }
 }
 ```
 
@@ -658,6 +662,10 @@ Total minimum: 30 stories
   "occasion": "state_dinner",
   "outcome_tier": "perfect",
   "bei_triggered": false,
-  "text": "Story text here. 3-5 sentences, under 100 words, includes at least one American cultural comparison."
+  "text": "Story text here.",
+  "media": {
+    "type": "video",
+    "src": "videos/state_dinner_perfect_01.webm"
+  }
 }
 ```
