@@ -18,6 +18,7 @@
   --color-bronze-light: var(--bronze-light);
   --color-gold: var(--gold);
   --color-ink: var(--ink);
+  --breakpoint-3xl: 1800px;
 }
 
 html, body {

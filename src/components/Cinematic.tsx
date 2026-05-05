@@ -53,8 +53,13 @@ export default function Cinematic({
   const current = acts[Math.min(act, 2)];
   const vessel = vesselById(current.vesselId);
 
+  const currentActIndex = Math.min(act, 2);
+  const cleanPinyin = vessel
+    ? vessel.name_pinyin.normalize('NFD').replace(/[̀-ͯ]/g, '')
+    : '';
+
   return (
-    <div className="fixed inset-0 z-50 bronze-gradient flex flex-col items-center justify-center">
+    <div className="fixed inset-0 z-50 bronze-gradient flex flex-col items-center justify-center overflow-hidden py-10">
       {beiTriggered && act === 2 && (
         <div className="absolute inset-0 z-30 pointer-events-none flex items-center justify-center">
           <div className="text-7xl font-bold text-red-500 animate-pulse drop-shadow-lg">
@@ -64,14 +69,49 @@ export default function Cinematic({
         </div>
       )}
 
-      <div className="text-bronze-light/60 uppercase tracking-[0.4em] text-sm mb-4">
-        Act {Math.min(act + 1, 3)} — {current.label}
+      <div className="flex flex-col items-center gap-3 mb-4">
+        <div className="text-bronze-light/45 uppercase tracking-[0.5em] text-xs">
+          Act {currentActIndex + 1} of 3
+        </div>
+        <div
+          className="text-3xl tracking-[0.3em] uppercase"
+          style={{
+            color: '#f3c969',
+            textShadow: '0 0 24px rgba(243,201,105,0.45)',
+          }}
+        >
+          {current.label}
+        </div>
+        <div className="flex gap-3 mt-1">
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="block h-[3px] rounded-full transition-all duration-500"
+              style={{
+                width: i === currentActIndex ? 56 : 24,
+                background:
+                  i < currentActIndex
+                    ? '#f3c96988'
+                    : i === currentActIndex
+                      ? '#f3c969'
+                      : 'rgba(243,201,105,0.18)',
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       <div
         key={act}
-        className={`relative w-[420px] h-[420px] ink-fade ${current.correct ? '' : 'shake'}`}
+        className={`relative w-[min(56vh,520px)] h-[min(56vh,520px)] ink-fade ${current.correct ? '' : 'shake'}`}
       >
+        <div
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{
+            background:
+              'radial-gradient(circle at 50% 55%, rgba(243,201,105,0.10) 0%, rgba(243,201,105,0) 55%)',
+          }}
+        />
         {vessel && vessel.available !== false ? (
           <ModelViewer url={vessel.model_asset} interactive={false} />
         ) : (
@@ -100,15 +140,25 @@ export default function Cinematic({
       </div>
 
       {vessel && (
-        <div className="mt-6 text-center">
-          <div className="text-3xl text-bronze-light">
-            {vessel.name_chinese}{' '}
-            <span className="text-base italic text-bronze-light/60">
-              {vessel.name_pinyin}
-            </span>
+        <div className="mt-4 flex flex-col items-center">
+          <div className="text-7xl text-bronze-light leading-none">
+            {vessel.name_chinese}
           </div>
-          <div className="text-sm text-foreground/70">
-            {vessel.name_english}
+          <div
+            className="h-px w-24 my-3"
+            style={{
+              background:
+                'linear-gradient(90deg, transparent, #f3c96966, transparent)',
+            }}
+          />
+          <div
+            className="text-4xl italic tracking-[0.18em] lowercase"
+            style={{
+              color: '#f3c969',
+              textShadow: '0 0 18px rgba(243,201,105,0.35)',
+            }}
+          >
+            {cleanPinyin}
           </div>
         </div>
       )}

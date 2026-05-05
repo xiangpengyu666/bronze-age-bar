@@ -42,7 +42,7 @@ function Model({
     // where OrbitControls.target points, giving a stable orbit pivot.
     cloned.position.sub(center);
     const maxDim = Math.max(size.x, size.y, size.z);
-    const dist = maxDim * 2.4;
+    const dist = maxDim * 1.6;
     camera.position.set(dist, dist * 0.6, dist);
     camera.lookAt(0, 0, 0);
     if (camera instanceof THREE.PerspectiveCamera) {

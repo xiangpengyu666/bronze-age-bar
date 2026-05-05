@@ -123,16 +123,18 @@ export default function GamePage() {
   // ── Render phases ───────────────────────────────────────────
   if (phase === 'occasion') {
     return (
-      <main className="min-h-screen px-8 py-10 ink-fade">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl text-bronze-light mb-2">
-            Choose Your Occasion
-          </h1>
-          <div className="text-foreground/60 italic">
-            Each setting demands a different ceremony.
+      <main className="min-h-screen px-4 sm:px-8 ink-fade flex flex-col items-center">
+        <div className="flex-1 flex items-center justify-center text-center w-full">
+          <div>
+            <h1 className="text-4xl sm:text-5xl text-bronze-light mb-3">
+              Choose Your Occasion
+            </h1>
+            <div className="text-foreground/60 italic text-sm sm:text-base">
+              Each setting demands a different ceremony.
+            </div>
           </div>
         </div>
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex flex-wrap justify-center gap-8 sm:gap-12 lg:gap-16">
           {occasions.map((o) => (
             <OccasionCard
               key={o.id}
@@ -141,10 +143,10 @@ export default function GamePage() {
             />
           ))}
         </div>
-        <div className="text-center mt-10">
+        <div className="flex-1 flex items-center justify-center w-full">
           <Link
             href="/"
-            className="text-bronze-light/60 hover:text-bronze-light text-sm"
+            className="text-bronze-light/60 hover:text-bronze-light text-2xl sm:text-3xl"
           >
             ← Back
           </Link>
@@ -154,11 +156,8 @@ export default function GamePage() {
   }
 
   if (phase === 'storage' || phase === 'warming' || phase === 'drinking') {
-    const stepLabel = {
-      storage: 'Step 1 — Choose a Storage Vessel',
-      warming: 'Step 2 — Choose a Warming Vessel',
-      drinking: 'Step 3 — Choose a Drinking Vessel',
-    }[phase];
+    const stepNum = { storage: '1', warming: '2', drinking: '3' }[phase];
+    const stepCategory = { storage: 'Storage', warming: 'Warming', drinking: 'Drinking' }[phase];
 
     const options =
       phase === 'storage'
@@ -168,13 +167,13 @@ export default function GamePage() {
           : drinkingOptions;
 
     return (
-      <main className="min-h-screen px-8 py-6 ink-fade relative">
-        <div className="fixed top-4 left-4 z-10">
+      <main className="min-h-screen px-4 sm:px-8 ink-fade relative flex flex-col items-center">
+        <div className="fixed top-2 left-2 sm:top-4 sm:left-4 z-10">
           {occObj && <OccasionCard occasion={occObj} compact />}
         </div>
 
         {phase === 'drinking' && drinkingVessel && (
-          <div className="fixed top-4 right-4 z-10">
+          <div className="fixed top-2 right-2 sm:top-4 sm:right-4 z-10">
             <WineMeter
               fillPercent={drinkingVessel.wine_meter_fill ?? 0}
               label="Wine Meter"
@@ -182,13 +181,37 @@ export default function GamePage() {
           </div>
         )}
 
-        <div className="text-center mb-8 mt-4">
-          <div className="text-xs text-bronze-light/60 uppercase tracking-widest">
-            {stepLabel}
+        <div className="flex-1 flex items-center justify-center text-center w-full">
+          <div className="flex flex-col items-center gap-3">
+            <div
+              className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-bronze/50 text-bronze-light/80 text-xs sm:text-sm uppercase tracking-[0.35em]"
+              style={{ fontFamily: '"Inter", "Helvetica Neue", Arial, sans-serif' }}
+            >
+              <span>Step</span>
+              <span className="text-gold font-semibold">{stepNum}</span>
+              <span className="opacity-60">/ 3</span>
+            </div>
+            <h2
+              className="text-3xl sm:text-4xl text-bronze-light/85 tracking-wide"
+            >
+              Choose a{' '}
+              <span
+                className="text-gold font-semibold uppercase mx-1 px-2"
+                style={{
+                  fontSize: '1.5em',
+                  letterSpacing: '0.08em',
+                  textShadow: '0 0 28px rgba(243,201,105,0.65)',
+                  borderBottom: '2px solid rgba(243,201,105,0.55)',
+                }}
+              >
+                {stepCategory}
+              </span>{' '}
+              Vessel
+            </h2>
           </div>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-10 lg:gap-12">
           {options.map((v) => (
             <VesselCard
               key={v.id}
@@ -197,6 +220,8 @@ export default function GamePage() {
             />
           ))}
         </div>
+
+        <div className="flex-1 w-full" />
       </main>
     );
   }

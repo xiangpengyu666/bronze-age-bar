@@ -32,20 +32,39 @@ export default function OccasionCard({
     <button
       onClick={onClick}
       className={`
-        flex flex-col items-start text-left p-6 rounded-lg
+        flex flex-col items-stretch text-left p-5 sm:p-8 rounded-lg
         bg-[#0d0d1a]/80 backdrop-blur-sm bronze-border
-        transition-all duration-200 max-w-sm
+        transition-all duration-200 w-full sm:w-auto max-w-[460px] sm:w-[460px]
         ${selected ? 'bronze-glow scale-[1.02]' : 'hover:bronze-glow hover:scale-[1.02]'}
       `}
     >
-      <div className="text-2xl text-bronze-light mb-3">
+      <div className="text-2xl sm:text-3xl text-bronze-light mb-3 sm:mb-4">
         {occasion.name_english}
       </div>
-      <div className="text-sm text-foreground/80 italic mb-4">
+      <div className="text-sm sm:text-base text-foreground/80 italic mb-4 sm:mb-5">
         “{occasion.flavor}”
       </div>
-      <div className="text-xs text-bronze-light/60 mt-auto">
+      <div className="text-xs sm:text-sm text-bronze-light/60 mb-4 sm:mb-5">
         {occasion.us_equivalent}
+      </div>
+      <div className="relative mt-auto rounded overflow-hidden border border-bronze/40 aspect-[3/2] bg-black/40">
+        <img
+          src={`/images/occasions/${occasion.id}.jpg`}
+          alt={occasion.us_equivalent}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover"
+          draggable={false}
+          style={{ filter: 'sepia(0.25) saturate(0.9) brightness(0.92)' }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(180deg, rgba(13,13,26,0) 60%, rgba(13,13,26,0.55) 100%)',
+          }}
+        />
       </div>
     </button>
   );

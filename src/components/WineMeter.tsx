@@ -5,6 +5,7 @@ interface Props {
   targetMin?: number;
   targetMax?: number;
   label?: string;
+  variant?: 'player' | 'expected';
 }
 
 export default function WineMeter({
@@ -12,24 +13,37 @@ export default function WineMeter({
   targetMin = 35,
   targetMax = 75,
   label,
+  variant = 'player',
 }: Props) {
   const inTarget = fillPercent >= targetMin && fillPercent <= targetMax;
   const overflow = fillPercent > targetMax + 15;
 
-  let liquidColor = '#5a5a82';
-  if (overflow) liquidColor = '#a32020';
-  else if (inTarget) liquidColor = '#f3c969';
+  let liquidColor: string;
+  if (variant === 'expected') {
+    liquidColor = '#7fc8a9';
+  } else {
+    liquidColor = '#5a5a82';
+    if (overflow) liquidColor = '#a32020';
+    else if (inTarget) liquidColor = '#f3c969';
+  }
 
   return (
     <div className="flex flex-col items-center gap-2">
       {label && (
-        <div className="text-xs text-bronze-light uppercase tracking-widest">
+        <div
+          className="text-xs uppercase tracking-widest"
+          style={{ color: variant === 'expected' ? '#7fc8a9' : undefined }}
+        >
           {label}
         </div>
       )}
       <div
         className="relative w-20 h-48 rounded-b-3xl rounded-t-md overflow-hidden bronze-border"
-        style={{ background: '#0d0d1a' }}
+        style={{
+          background: '#0d0d1a',
+          boxShadow:
+            variant === 'expected' ? '0 0 0 1px #7fc8a955 inset' : undefined,
+        }}
       >
         {/* Fill */}
         <div

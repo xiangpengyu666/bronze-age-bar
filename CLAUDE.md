@@ -26,9 +26,33 @@ Game phase machine (in `gameStore.ts`):
 occasion → storage → warming → drinking → cinematic → result
 ```
 
-Vessels are defined in `src/data/vessels.ts`. Each entry references a GLB at `/models/<name>.glb`. Two vessels (`gu`, `jiao`) have `available: false` because no GLB exists for them — they render as "(3D model unavailable)" in cards.
+Vessels are defined in `src/data/vessels.ts`. All 14 entries are now sourced from `123/SPEC.md` (Cindy's spec doc) — when editing copy (name_english, short_description, historical_fact, slip_description, us_equivalent), update SPEC.md first, then port the change here. Don't paraphrase: the spec voice (Starbucks comparisons, 《礼记》quotes, Secret Service jokes) is part of the product tone.
+
+All 14 vessels have GLBs in `public/models/`. `gu` and `jiao` were added later — both compressed via the same gltf-transform pipeline as the rest. **`gu` had the same `KHR_materials_pbrSpecularGlossiness` issue as `zhi`/`you`** (Sketchfab export), so it needs `metalrough` conversion before `optimize`, otherwise the textures render black.
 
 Note: `jue_warm` and `jue` are two distinct vessel ids that **share the same GLB** (`/models/jue.glb`). Anywhere the code derives an asset URL from the vessel, it must use `model_asset` not `id` (the thumbnail derivation in `VesselCard.tsx` / `Collection.tsx` does this).
+
+## Result screen
+
+`ResultScreen.tsx` shows two `<WineMeter>` side-by-side: the player's pour (`fillPercent` = selected drinking vessel's `wine_meter_fill`) and the expected pour (`fillPercent` = occasion's `correct_drinking` vessel's `wine_meter_fill`). Both share per-occasion target zones:
+
+| Occasion | targetMin | targetMax |
+| --- | --- | --- |
+| `state_dinner` | 40 | 70 |
+| `governor_summit` | 20 | 60 |
+| `backyard_bbq` | 60 | 100 |
+
+These are sourced from SPEC.md §Phase 3 — Wine Meter. The "Expected" meter passes `variant="expected"` to `<WineMeter>`, which forces a teal-green liquid color (`#7fc8a9`) regardless of fill — it's a reference, not a graded result, so it shouldn't recolor based on target match.
+
+Outcome tiers (`perfect` / `minor_breach` / `total_disgrace`) drive an `accent` color used for the title glow, divider gradient, vessel card border, "Court Records" panel border, and Play Again button (gold / soft bronze / dim red respectively).
+
+## Visual / button hierarchy
+
+Two CTA tiers, used consistently across landing and gallery:
+- **Primary (gold)**: `Begin Ritual`, `Back to Start`, Result screen `Play Again`. Color `#f3c969`, gold border + faint amber background + gold glow.
+- **Secondary (bronze)**: `Vessel Collection`, Result screen `View Collection`. Color `#d4a574`, bronze border, much subtler glow.
+
+Don't make secondary actions gold — the gold accent is reserved for the action you want the player to take. Pinyin throughout the app strips tone marks for display (`name_pinyin.normalize('NFD').replace(/[̀-ͯ]/g, '')`) — display Chinese characters when you want exoticism, the cleaned ASCII pinyin when you want readability. Never both with diacritics.
 
 ## The 3D pipeline (the part that previously froze the entire computer)
 
