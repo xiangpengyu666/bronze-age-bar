@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -23,6 +22,7 @@
 
 # misc
 .DS_Store
+**/.DS_Store
 *.pem
 
 # debug
@@ -33,6 +33,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -51,6 +52,3 @@ next-env.d.ts
 
 # Local pasted screenshots / scratch
 /123/
-=======
-**/.DS_Store
->>>>>>> 7fdcbdc2c4fea940913e209786cf66221af3c905
