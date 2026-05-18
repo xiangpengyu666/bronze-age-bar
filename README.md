@@ -1,6 +1,10 @@
 # Sip or Slip — The Bronze Age Bar
 
+🎮 **Play now:** <https://bronze-age-bar.vercel.app/>
+
 A short browser game that teaches Western players about ancient Chinese bronze ritual vessels through a simulated drinking ceremony. Pick a social occasion, then choose the correct storage / warming / drinking vessel at each step. Wrong choices trigger humorous animations; right ones unlock a Perfect Ceremony cinematic.
+
+The hosted build above is auto-deployed from `main` via Vercel — every push to `main` produces a new production deployment, and every PR gets its own Preview URL.
 
 This README is written for someone who wants to **clone the repo and run the exact same build the developer (Xiangpeng) sees on his machine**. Follow it top-to-bottom — every step has been verified.
 
