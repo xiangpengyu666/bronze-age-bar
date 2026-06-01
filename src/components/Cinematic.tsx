@@ -139,7 +139,7 @@ export default function Cinematic({
           type="button"
           onClick={finish}
           aria-label="Skip cinematic"
-          className="absolute top-6 right-6 px-4 py-2 rounded-md bg-black/60 border border-bronze/60 text-bronze-light hover:bronze-glow text-xs uppercase tracking-[0.3em]"
+          className="absolute bottom-8 right-8 px-6 py-3 rounded-md bg-black/70 border border-bronze/70 text-bronze-light hover:bronze-glow text-sm uppercase tracking-[0.3em] font-semibold transition-shadow"
         >
           Skip ›
         </button>

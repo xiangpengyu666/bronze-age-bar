@@ -111,7 +111,10 @@ export default function BackgroundMusic() {
         onClick={toggle}
         aria-label={muted ? '开启背景音乐' : '关闭背景音乐'}
         title={muted ? '开启背景音乐' : '关闭背景音乐'}
-        className="fixed bottom-4 right-4 z-50 w-11 h-11 rounded-full flex items-center justify-center bronze-border bg-[#0d0d1a]/85 text-bronze-light hover:bronze-glow text-lg transition-shadow"
+        // Hidden while a cinematic ducks the music — the bottom-right corner
+        // belongs to the cinematic's Skip button during that window, and the
+        // music control would be a no-op anyway (audio is paused).
+        className={`fixed bottom-4 right-4 z-50 w-11 h-11 rounded-full flex items-center justify-center bronze-border bg-[#0d0d1a]/85 text-bronze-light hover:bronze-glow text-lg transition-shadow ${ducked ? 'hidden' : ''}`}
       >
         <span aria-hidden>{muted ? '🔇' : '🔊'}</span>
       </button>
