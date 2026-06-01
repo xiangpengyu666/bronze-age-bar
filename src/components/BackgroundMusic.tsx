@@ -24,6 +24,12 @@ export default function BackgroundMusic() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [muted, setMuted] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  // `ducked` is transient: the <Cinematic> component dispatches
+  // `cinematic-start` / `cinematic-end` window events while it plays an
+  // outcome video, and we pause background music for the duration so the
+  // soundtrack doesn't fight the cinematic. Separate from the user's own
+  // mute preference (which is persistent).
+  const [ducked, setDucked] = useState(false);
 
   // Restore preference from localStorage on first client render.
   useEffect(() => {
@@ -36,7 +42,19 @@ export default function BackgroundMusic() {
     setHydrated(true);
   }, []);
 
-  // Drive the underlying <audio> element based on the muted state.
+  // Listen for cinematic ducking events.
+  useEffect(() => {
+    const onStart = () => setDucked(true);
+    const onEnd = () => setDucked(false);
+    window.addEventListener('cinematic-start', onStart);
+    window.addEventListener('cinematic-end', onEnd);
+    return () => {
+      window.removeEventListener('cinematic-start', onStart);
+      window.removeEventListener('cinematic-end', onEnd);
+    };
+  }, []);
+
+  // Drive the underlying <audio> element based on the muted / ducked state.
   useEffect(() => {
     if (!hydrated) return;
     const audio = audioRef.current;
@@ -44,7 +62,7 @@ export default function BackgroundMusic() {
 
     audio.volume = DEFAULT_VOLUME;
 
-    if (muted) {
+    if (muted || ducked) {
       audio.pause();
       return;
     }
@@ -67,7 +85,7 @@ export default function BackgroundMusic() {
       }
     };
     tryPlay();
-  }, [hydrated, muted]);
+  }, [hydrated, muted, ducked]);
 
   const toggle = () => {
     const next = !muted;
