@@ -128,7 +128,24 @@ export default function Cinematic({
           key={videoSrc}
           src={videoSrc}
           autoPlay
-          muted
+          // NOT muted — background music is already ducked during this
+          // phase, so there's nothing to clash with, and the source mp4s
+          // have soundtrack audio worth hearing. By this point the user has
+          // clicked through ~5 buttons (landing → game → occasion → 3 vessel
+          // picks), which satisfies every browser's autoplay-with-sound
+          // policy. A muted-fallback in the onError handler covers the rare
+          // edge case where autoplay is still blocked.
+          ref={(el) => {
+            if (!el) return;
+            el.volume = 0.8;
+            const p = el.play();
+            if (p && typeof p.catch === 'function') {
+              p.catch(() => {
+                el.muted = true;
+                el.play().catch(() => {});
+              });
+            }
+          }}
           playsInline
           preload="auto"
           onEnded={finish}
