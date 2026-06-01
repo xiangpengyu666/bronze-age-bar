@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display } from "next/font/google";
 import "./globals.css";
+import BackgroundMusic from "@/components/BackgroundMusic";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -25,6 +26,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bronze-gradient">
         {children}
+        <BackgroundMusic />
       </body>
     </html>
   );
